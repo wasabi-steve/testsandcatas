@@ -1,0 +1,75 @@
+Notes and Assumptions
+=====================
+
+Assumption is that the product code is a string as it is referenced as 001, 002, etc.
+
+As we're only interested in the product price at this stage (ie not description) I can use
+a simple hash to store the products and prices.
+
+I have assumed that the promotional_rules can be a hash containing the rules.
+
+I have assumed that there is only one discount band based on the total purchase price. The
+percentage and level it is applied at can be set as part of the promotional rules.
+
+Using a hash for the multi-product discounts allows me to use the product code as the key
+rather than having to iterate through the ruleset. An advantage of this is that
+additional hashes can be added for other products with multi-product discounts as the
+need arises.
+
+At this stage I only need the product code in the basket as there is no requirement to
+show a more detailed breakdown.
+
+I have assumed that no out of range or similar checks need to be implemented for the
+purpose of the test, eg to ensure that only valid products can be added to the basket.
+
+I've decided to iterate through the basket to apply discounts rather than iterating through
+the the rules. Assumption is that there'll probably be more rules than items in a typical
+basket, so it should be simpler. Trade off is that the basket.count will be called for each 
+product in the basket for multi product discounts, but no need to prematurely optimise at
+this stage.
+
+As we're dealing with floats we need to round the final total to two decimal places so that
+it is shown with the correct precision. Probably should use decimal field to remove the precision
+errors that float can often have.
+
+Leaving the discounting code as part of the total method could arguably be more readable at
+this stage as it is quite simple, but as the discounting is likely to get more complicated
+I've separated the logic to private methods to save likely refactoring of the total method.
+
+
+I've used the older style ':key => value' rather than the newer 'key: value' so the
+test runs on any ruby versions. 
+
+I prefer to (unnecessary) use return in methods as it shows the intent of what should be returned
+and makes scanning the source easier. 
+
+I prefer to avoid the "<condition> ? foo : bar" ternary operator for all but simple cases. This
+would allow the discount methods to be more compact, but they would also be more dense, and my
+preference is for readability.
+
+
+Limitations
+===========
+
+The test matches the requirements of being able to change the promotions, but there are a
+few areas that could benefit from improvement. I've stopped at this point as I feel that it
+passes the test requirements. The additional functionality could add unnecessary complexity
+at this stage and may not actually be required.
+
+1. You can create more than one multiple product promotion rule for the same product, but only
+the first one will be used. I would likely look to add some logic to only select the highest
+or_more_quantity rule that matches the basket.count and then use that one. Or parse the rules as
+part of the initialize and throw an exception if multiple rules are found for the same product.
+
+2. There is only one basket total discount. I suspect that a requirement would arise for banded
+discounts, eg further discount if £100 or more is purchased, etc but this again adds a fair
+amount of complexity. A similar approach of sorting the rules and only selecting the highest
+discount that applies would be used to implement this.
+
+3. The ability to scan a non-existent product can cause problems later in the totalling. This could
+be caught in an exception or by simply returning false from the method, but again I feel it is
+better to let the code fail until the exception handling requirements are known to ensure that the
+caller can properly handle the item not being inserted.
+
+
+

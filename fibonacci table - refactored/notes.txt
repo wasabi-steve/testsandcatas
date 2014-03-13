@@ -1,0 +1,12 @@
+Notes
+=====
+
+Refactored version of the initial fibonacci code to move the prime functions to
+a module as they would probably likely live here if implemented in a real system.
+
+Also makes the testing and intent more focused.
+
+
+
+I prepared this on Ruby-2.1.0 with the rspec gem.
+

@@ -1,0 +1,37 @@
+Notes
+=====
+
+I'll use a constant to define the display width of each table
+cell to allow the table to be adjusted for different widths.
+Probably overkill, but saves me repeating a fixed number.
+
+I'll create the functionality as methods as it feels like a command line
+style of program and also to allow me to test the various components
+while ignoring formatting. Might think of moving it to a module if it
+was going to be used in production.
+
+If I use a matrix then I can easily build the table to load the values.
+
+I'll want to hold a matrix of just the data and then decorate it with 
+the legends later on, as they are really just for display. I'll also
+assume that the matrix is square and we therefore only need one of the
+dimensions.
+
+For this exercise I'll test the maths related functions, but not
+include tests for the display formatting to reduce the number of tests.
+
+The table is formatted with divider lines to aid readability. There is
+some duplication for printing the --- lines that I could probably reduce.
+
+You can change the size of the table by changing the number of prime
+numbers to be retrieved from 10.
+
+There are a lot more tests that could go in, but I've included enough to
+cover the most common cases.
+
+I could receive the parameter from the command line and use that rather
+than hard coding in the run_the_test(10) line, but I was not sure whether
+this is what was required.
+
+I prepared this on Ruby-2.1.0 with the rspec gem.
+
